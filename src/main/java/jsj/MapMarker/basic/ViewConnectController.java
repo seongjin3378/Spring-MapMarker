@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class coordinateController {
+public class ViewConnectController {
 
     private final Logger log =  LoggerFactory.getLogger(getClass());
 
@@ -19,6 +19,7 @@ public class coordinateController {
 
         return "coordinate";
     }
+
     @GetMapping ("/workload")
     public String View_workload(){
         String name = "Spring";
