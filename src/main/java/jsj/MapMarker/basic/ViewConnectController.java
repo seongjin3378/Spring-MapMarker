@@ -12,10 +12,6 @@ public class ViewConnectController {
 
     @GetMapping ("/coordinate")
     public String View_coordinate(){
-        String name = "Spring";
-
-        System.out.println("name = " + name);
-        log.info(" info log={}", name);
 
         return "coordinate";
     }

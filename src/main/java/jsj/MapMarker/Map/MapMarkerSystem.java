@@ -1,6 +1,6 @@
-package Map;
+package jsj.MapMarker.Map;
 
-import crops.CropsData;
+import jsj.MapMarker.crops.CropsData;
 
 public interface MapMarkerSystem {
     CropsData load(String latitude, String longitude, String cropsName);

@@ -5,9 +5,12 @@
     <title>좌표 찍기</title>
 </head>
 <body>
-<div><button>저장</button> <button>삭제</button></div>
+<form method="post" action="/coordinate">
+    <p><label>위도 : <input type="text" name="latitude"></label></p>
+    <p><label>경도 : <input type="text" name="longitude"></label></p>
+    <p><input type="submit" value="Submit"></p>
+</form>
 
-<div><img src="images/2-3-basic.png" style="width:40%"></div>
 <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">gregvregregve<br>
 <input type="checkbox" id="vehicle2" name="vehicle1" value="Bike">gregvregregve&nbsp
 </body>

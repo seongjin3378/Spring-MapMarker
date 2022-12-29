@@ -1,6 +1,6 @@
 package jsj.MapMarker;
 
-import SQLite.SQLiteManager;
+import jsj.MapMarker.SQLite.SQLiteManager;
 
 import java.sql.SQLException;
 

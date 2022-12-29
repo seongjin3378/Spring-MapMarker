@@ -1,4 +1,4 @@
-package SQLite;
+package jsj.MapMarker.SQLite;
 
 import java.sql.*;
 

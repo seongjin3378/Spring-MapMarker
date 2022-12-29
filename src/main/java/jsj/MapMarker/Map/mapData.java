@@ -1,4 +1,4 @@
-package Map;
+package jsj.MapMarker.Map;
 
 public class mapData {
     double latitude;
