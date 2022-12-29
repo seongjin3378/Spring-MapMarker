@@ -10,10 +10,12 @@
     <button>삭제</button>
     <label for="date">날짜를 선택해주세요:</label>
 
-    <select name="date" id="date">
-    <option value="2022-12-14">2022-12-14</option>
-    </select>
 
+    <select name="date" id="date">
+        {{#date}}
+        <option value="{{.}}">{{.}}</option>
+        {{/date}}
+    </select>
 </div>
 
 <div><img src="images/2-3-basic.png" style="width:40%"></div>
