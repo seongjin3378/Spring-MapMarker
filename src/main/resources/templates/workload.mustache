@@ -6,20 +6,36 @@
 </head>
 <body>
 <div>
-    <button>저장</button>
-    <button>삭제</button>
-    <label for="date">날짜를 선택해주세요:</label>
-
-
+    <button>save</button>
+    <button>delete</button>
+    <form method="post" action="/workload/loadData">
+    <label for="date">select date :</label>
     <select name="date" id="date">
         {{#date}}
         <option value="{{.}}">{{.}}</option>
         {{/date}}
     </select>
+    <input type="submit" value="Load">
+    </form>
 </div>
 
-<div><img src="images/2-3-basic.png" style="width:40%"></div>
-<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">gregvr3122222222222222222egregve<br>
-<input type="checkbox" id="vehicle2" name="vehicle1" value="Bike">gregvregregve&nbsp
+<div id="map" style="width:100%; height: 100vh;"></div>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBH0-lnC8QZgYZ4l1_2qw0NiYJMUizykrE&callback=initMap&region=kr"></script>
+<script>
+    function initMap() {
+        let seoul = { lat: 37.5642135 ,lng: 127.0016985 };
+        let map = new google.maps.Map(
+                document.getElementById('map'), {
+                    zoom: 12,
+                    center: seoul
+                });
+
+    }
+</script>
+<div>
+{{#dataOfDate}}
+<input type="checkbox" name="checkedValue" value="{{id}},{{name}},{{latitude}},{{longitude}}">{{id}}, {{name}}, {{latitude}}, {{longitude}}<br>
+{{/dataOfDate}}
+</div>
 </body>
 </html>

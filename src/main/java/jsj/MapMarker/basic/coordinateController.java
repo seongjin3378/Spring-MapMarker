@@ -18,9 +18,11 @@ public class coordinateController {
     public String save(@ModelAttribute coordinateForm coordinateForm) {
         CropsData cropsData = new CropsData();
         cropsData.setDate("2022-12-27");
-        cropsData.setName("감귤");
+        cropsData.setName("Orange");
+
         cropsData.setLatitude(coordinateForm.latitude);
         cropsData.setLongitude(coordinateForm.longitude);
+
         springRepository.save(cropsData);
         return "redirect:/";
     }

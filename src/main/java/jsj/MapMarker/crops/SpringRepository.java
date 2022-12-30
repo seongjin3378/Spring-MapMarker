@@ -10,9 +10,6 @@ import java.util.Optional;
 public interface SpringRepository extends JpaRepository<CropsData, Long>{
 
     @Override
-    List<CropsData> findAllById(Iterable<Long> longs);
-
-    @Override
     List<CropsData> findAll();
 
     @Override
