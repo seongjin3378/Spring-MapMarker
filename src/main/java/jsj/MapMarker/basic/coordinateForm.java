@@ -1,9 +1,18 @@
 package jsj.MapMarker.basic;
 
 public class coordinateForm {
-    String latitude;
-    String longitude;
+    private String latitude;
+    private String longitude;
+    private String cropsName;
 
+
+    public String getCropsName() {
+        return cropsName;
+    }
+
+    public void setCropsName(String cropsName) {
+        this.cropsName = cropsName;
+    }
     public String getLatitude() {
         return latitude;
     }
