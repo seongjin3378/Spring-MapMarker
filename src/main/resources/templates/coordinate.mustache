@@ -8,14 +8,16 @@
 <body>
 <form method="POST" action="/coordinate">
     <div class="form-group">
-    <p><label>CropsName : <input type="text" name="cropsName"></label></p>
+    <p><label>CropsName : <input type="text" name="cropsName" id="cropsName"></label></p>
     <p><label>Latitude : <input type="text" name="latitude"></label></p>
     <p><label>Longitude : <input type="text" name="longitude"></label></p>
     <p><input type="submit" value="Submit"></p>
     </div>
 </form>
+
 <button id="Measure"> Crops Measurement </button>
-<button id="termination">termination</button>
+<button id="termination">Termination</button>
+<button id="remove">Remove</button>
 <div id="map" style="width:100%; height: 100vh;"></div>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBH0-lnC8QZgYZ4l1_2qw0NiYJMUizykrE&callback=initMap&region=kr"></script>
 <script>
@@ -32,7 +34,9 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript">
-    let measuerment;
+    let measurement;
+    //const name = document.getElementById("cropsName").value;
+
             $(document).ready(function () {
                 $('#Measure').on('click', function () {
                     window.navigator.geolocation.getCurrentPosition(success, error);//()를 붙여 자동호출하는것 x
@@ -40,16 +44,34 @@
             });
     $(document).ready(function () {
         $('#termination').on('click', function () {
-            clearInterval(measuerment);
+            clearInterval(measurement);
         })
     });
 
     function success(position){
-        measuerment = setInterval(() => $('#myCoordinate').append("<p>"+"latitude = " + position.coords.latitude + " longitude = " + position.coords.longitude + "</p>"), 5000);
+        measurement = setInterval(() => $('#myCoordinate').append("<p>"+ "<input type=\"checkbox\" name = \"Chk\">"+ document.getElementById("cropsName").value + ", latitude = " + position.coords.latitude + ", longitude = " + position.coords.longitude + "</p>"), 5000);
     }
     function error(err){
         $('#myCoordinate').text("조회 실패 ==>" + err.code);
     }
+
+    $('#remove').click(function() {
+        if ($("input:checkbox[name='Chk']:checked").length === 0) {
+            alert("삭제할 항목을 선택해 주세요.");
+            return;
+        }
+
+        $("input:checkbox[name='Chk']:checked").each(function(k,kVal){
+            console.log("kVal ::", kVal.parentElement);
+            let a = kVal.parentElement;
+            $(a).remove();
+        });
+        const list = $("input:checkbox[name='Chk']")
+        for (let i =0; i< list.length; i++)
+        {
+            list[i].setAttribute('name', 'Chk_list[' + i + ']');
+        }
+    });
 </script>
 <div id="myCoordinate"></div>
 </body>
