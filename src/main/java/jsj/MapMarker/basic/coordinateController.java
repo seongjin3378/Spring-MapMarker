@@ -5,6 +5,8 @@ import jsj.MapMarker.crops.SpringRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 public class coordinateController {
 
@@ -25,6 +27,14 @@ public class coordinateController {
 
         springRepository.save(cropsData);
         return "redirect:/";
+    }
+
+    @ResponseBody
+    @PostMapping("/coordinate/save")
+    public String save(@RequestBody String fullName)
+    {
+        System.out.println(fullName);
+        return "hello" + fullName;
     }
 
 }

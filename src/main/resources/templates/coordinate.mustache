@@ -18,6 +18,7 @@
 <button id="Measure"> Crops Measurement </button>
 <button id="termination">Termination</button>
 <button id="remove">Remove</button>
+<button id="save">Save</button>
 <div id="map" style="width:100%; height: 100vh;"></div>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBH0-lnC8QZgYZ4l1_2qw0NiYJMUizykrE&callback=initMap&region=kr"></script>
 <script>
@@ -49,7 +50,10 @@
     });
 
     function success(position){
-        measurement = setInterval(() => $('#myCoordinate').append("<p>"+ "<input type=\"checkbox\" name = \"Chk\">"+ document.getElementById("cropsName").value + ", latitude = " + position.coords.latitude + ", longitude = " + position.coords.longitude + "</p>"), 5000);
+        measurement = setInterval(() => $('#myCoordinate').append("<p>"+ "<input type=\"checkbox\" name = \"Chk\">"
+                + "cropsName : "+ document.getElementById("cropsName").value + ", " +
+                "latitude : " + position.coords.latitude + ", " +
+                "longitude : " + position.coords.longitude + ", </p>"), 5000);
     }
     function error(err){
         $('#myCoordinate').text("조회 실패 ==>" + err.code);
@@ -66,13 +70,29 @@
             let a = kVal.parentElement;
             $(a).remove();
         });
-        const list = $("input:checkbox[name='Chk']")
-        for (let i =0; i< list.length; i++)
-        {
-            list[i].setAttribute('name', 'Chk_list[' + i + ']');
-        }
     });
+    $(document).ready(function(){
+        $('#save').click(function(){   //submit 버튼을 클릭하였을 때
+            let sendData = $('#myCoordinate').text();   //폼의 이름 값을 변수 안에 담아줌
+            let sendData_list = sendData.split(",");
+
+            //const list = $("input:checkbox[name='Chk']")
+            //for (let i =0; i< list.length; i++)
+            //{
+            console.log(sendData_list);
+            //}
+            $.ajax({
+                type:'post',   //post 방식으로 전송
+                url:'/coordinate/save',   //데이터를 주고받을 파일 주소
+                data:sendData,   //위의 변수에 담긴 데이터를 전송해준다.
+                dataType:'html',   //html 파일 형식으로 값을 담아온다.
+            });
+            alert("성공 완료");
+        });
+    });
+
+
 </script>
-<div id="myCoordinate"></div>
+    <div id="myCoordinate"></div>
 </body>
 </html>
