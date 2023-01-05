@@ -90,10 +90,13 @@
             //console.log(sendData_list);
             //}
             $.ajax({
-                type:'post',   //post 방식으로 전송
-                url:'/coordinate/save',   //데이터를 주고받을 파일 주소
-                data:digit,   //위의 변수에 담긴 데이터를 전송해준다.
-                //dataType:Array,   //html 파일 형식으로 값을 담아온다.
+                method: 'post',
+                url: '/coordinate/save',
+                traditional: true,
+                data: {
+                    data: JSON.stringify(digit)
+                },
+                dataType: 'json',
                 success     :   function(retVal){
 
                     if(retVal.code == "OK") {
