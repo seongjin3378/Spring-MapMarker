@@ -53,8 +53,9 @@
         measurement = setInterval(() => $('#myCoordinate').append("<p>"+ "<input type=\"checkbox\" name = \"Chk\">"
                 + "cropsName : "+ document.getElementById("cropsName").value + ", " +
                 "latitude : " + position.coords.latitude + ", " +
-                "longitude : " + position.coords.longitude + ", </p>"), 5000);
+                "longitude : " + position.coords.longitude + "<label hidden>OK</label></p>"), 5000);
     }
+
     function error(err){
         $('#myCoordinate').text("조회 실패 ==>" + err.code);
     }
@@ -74,18 +75,37 @@
     $(document).ready(function(){
         $('#save').click(function(){   //submit 버튼을 클릭하였을 때
             let sendData = $('#myCoordinate').text();   //폼의 이름 값을 변수 안에 담아줌
-            let sendData_list = sendData.split(",");
+            let sendData_list = sendData.split("OK");
+            let digit = [];
 
+            sendData_list.forEach((item, index) => {
+                digit.push({item});
+            });
+            let jsonEncode = JSON.stringify(digit);
+            console.log()
+            console.log(jsonEncode);
             //const list = $("input:checkbox[name='Chk']")
             //for (let i =0; i< list.length; i++)
             //{
-            console.log(sendData_list);
+            //console.log(sendData_list);
             //}
             $.ajax({
                 type:'post',   //post 방식으로 전송
                 url:'/coordinate/save',   //데이터를 주고받을 파일 주소
-                data:sendData,   //위의 변수에 담긴 데이터를 전송해준다.
-                dataType:'html',   //html 파일 형식으로 값을 담아온다.
+                data:digit,   //위의 변수에 담긴 데이터를 전송해준다.
+                //dataType:Array,   //html 파일 형식으로 값을 담아온다.
+                success     :   function(retVal){
+
+                    if(retVal.code == "OK") {
+                        alert(retVal.message);
+                    } else {
+                        alert(retVal.message);
+                    }
+
+                },
+                error       :   function(request, status, error){
+                    console.log("AJAX_ERROR");
+                }
             });
             alert("성공 완료");
         });
