@@ -33,7 +33,7 @@
     navigator.geolocation.getCurrentPosition(onGeoOk,onGeoError);
     function initMap() {
         let mola = {lat: 35.9661568, lng: 126.7073024};
-        let map = new google.maps.Map(
+        const map = new google.maps.Map(
                 document.getElementById('map'), {
                     zoom: 12,
                     center: mola
@@ -41,6 +41,7 @@
 
         let marker2 = new google.maps.Marker({position: mola, map: map});
     }
+
 </script>
 <div>
 {{#dataOfDate}}

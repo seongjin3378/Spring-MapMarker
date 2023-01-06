@@ -38,8 +38,8 @@ public class coordinateController {
     String parsing_save_data(String data)
     {
         String json = data;
-        json = json.replace("\"item\":", "");
-        json = json.replace(",{\"\"}", "");
+        json =json.replace("\"item\":", "");
+        json =  json.replace(",{\"\"}", "");
         json = json.replace(" ", "");
         json = json.replace(":", "\" : \"");
         json = json.replace(",", "\", \"");

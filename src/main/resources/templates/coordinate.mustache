@@ -21,17 +21,6 @@
 <button id="save">Save</button>
 <div id="map" style="width:100%; height: 100vh;"></div>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBH0-lnC8QZgYZ4l1_2qw0NiYJMUizykrE&callback=initMap&region=kr"></script>
-<script>
-    function initMap() {
-        let seoul = { lat: 37.5642135 ,lng: 127.0016985 };
-        let map = new google.maps.Map(
-                document.getElementById('map'), {
-                    zoom: 12,
-                    center: seoul
-                });
-
-    }
-</script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript">
@@ -40,7 +29,7 @@
 
             $(document).ready(function () {
                 $('#Measure').on('click', function () {
-                    window.navigator.geolocation.getCurrentPosition(success, error);//()를 붙여 자동호출하는것 x
+                    measurement = setInterval(() => window.navigator.geolocation.getCurrentPosition(success, error), 5000);//()를 붙여 자동호출하는것 x
                 })
             });
     $(document).ready(function () {
@@ -50,10 +39,10 @@
     });
 
     function success(position){
-        measurement = setInterval(() => $('#myCoordinate').append("<p>"+ "<input type=\"checkbox\" name = \"Chk\">"
+        $('#myCoordinate').append("<p>"+ "<input type=\"checkbox\" name = \"Chk\">"
                 + "cropsName : "+ document.getElementById("cropsName").value + ", " +
                 "latitude : " + position.coords.latitude + ", " +
-                "longitude : " + position.coords.longitude + "<label hidden>OK</label></p>"), 5000);
+                "longitude : " + position.coords.longitude + "<label hidden>OK</label></p>");
     }
 
     function error(err){
@@ -72,8 +61,9 @@
             $(a).remove();
         });
     });
-    $(document).ready(function(){
-        $('#save').click(function(){   //submit 버튼을 클릭하였을 때
+    function bring_myCoordinate(button_id, url)
+    {
+        $(button_id).click(function(){   //submit 버튼을 클릭하였을 때
             let sendData = $('#myCoordinate').text();   //폼의 이름 값을 변수 안에 담아줌
             let sendData_list = sendData.split("OK");
             let digit = [];
@@ -81,17 +71,11 @@
             sendData_list.forEach((item, index) => {
                 digit.push({item});
             });
-            let jsonEncode = JSON.stringify(digit);
             console.log()
-            console.log(jsonEncode);
-            //const list = $("input:checkbox[name='Chk']")
-            //for (let i =0; i< list.length; i++)
-            //{
-            //console.log(sendData_list);
-            //}
+            console.log(sendData_list);
             $.ajax({
                 method: 'post',
-                url: '/coordinate/save',
+                url: url,
                 traditional: true,
                 data: {
                     data: JSON.stringify(digit)
@@ -112,8 +96,33 @@
             });
             alert("성공 완료");
         });
+    }
+    $(document).ready(function(){
+        bring_myCoordinate('#save', 'coordinate/save')
     });
+    window.initMap = function () {
+        const map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: 37.5400456, lng: 126.9921017 },
+            zoom: 10,
+        });
 
+        const malls = [
+            { label: "C", name: "코엑스몰", lat: 37.5115557, lng: 127.0595261 },
+            { label: "G", name: "고투몰", lat: 37.5062379, lng: 127.0050378 },
+            { label: "D", name: "동대문시장", lat: 37.566596, lng: 127.007702 },
+            { label: "I", name: "IFC몰", lat: 37.5251644, lng: 126.9255491 },
+            { label: "L", name: "롯데월드타워몰", lat: 37.5125585, lng: 127.1025353 },
+            { label: "M", name: "명동지하상가", lat: 37.563692, lng: 126.9822107 },
+            { label: "T", name: "타임스퀘어", lat: 37.5173108, lng: 126.9033793 },
+        ];
+        malls.forEach(({ label, lat, lng }) => {
+            const marker = new google.maps.Marker({
+                position: { lat, lng },
+                label,
+                map,
+            });
+        });
+    };
 
 </script>
     <div id="myCoordinate"></div>
