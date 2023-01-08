@@ -6,6 +6,7 @@ import java.util.Optional;
 
 public interface CropsSystem {
 
+
     ArrayList<String> findAllByDate();
     ArrayList<CropsData> SelectDateAndFindData(String date);
 }

@@ -4,14 +4,19 @@ import jsj.MapMarker.crops.CropsData;
 import jsj.MapMarker.crops.SpringRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class coordinateController {
@@ -34,12 +39,10 @@ public class coordinateController {
         springRepository.save(cropsData);
         return "redirect:/";
     }
-
-    String parsing_save_data(String data)
-    {
+    String parsing_save_data(String data) {
         String json = data;
-        json =json.replace("\"item\":", "");
-        json =  json.replace(",{\"\"}", "");
+        json = json.replace("\"item\":", "");
+        json = json.replace(",{\"\"}", "");
         json = json.replace(" ", "");
         json = json.replace(":", "\" : \"");
         json = json.replace(",", "\", \"");
@@ -52,10 +55,12 @@ public class coordinateController {
 
         return json;
     }
+
+
+
     @ResponseBody
     @PostMapping("/coordinate/save")
-    public String save(@RequestParam String data)
-    {
+    public String save(@RequestParam String data) {
         String json = parsing_save_data(data);
         JSONObject jsnobject = new JSONObject(json);
 
@@ -73,5 +78,25 @@ public class coordinateController {
         }
         return "hello" + data;
     }
+    @PostMapping("/coordinate/marking")
+    public String marking(@RequestParam String data, Map<String, Object> model) {
+        //ResponseEntity<String> r = null;
+        String json = parsing_save_data(data);
+        JSONObject jsnobject = new JSONObject(json);
+        List<CropsData> markerData = new ArrayList<>();
+        JSONArray jsonArray = jsnobject.getJSONArray("item");
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject explrObject = jsonArray.getJSONObject(i);
+            CropsData cropsData = new CropsData();
+            cropsData.setName(explrObject.getString("cropsName"));
+            cropsData.setLatitude(explrObject.getString("latitude"));
+            cropsData.setLongitude(explrObject.getString("longitude"));
+            markerData.add(cropsData);
+        }
+        model.put("markerData", markerData);
+        //r= new ResponseEntity<>(HttpStatus.OK);
+        return "/coordinate";
+    }
+
 
 }
