@@ -8,6 +8,7 @@
 <div>
     <button>save</button>
     <button>delete</button>
+    <button id="marking">Marking</button>
     <form method="post" action="/workload/loadData">
     <label for="date">select date :</label>
     <select name="date" id="date">
@@ -18,36 +19,74 @@
     <input type="submit" value="Load">
     </form>
 </div>
-
 <div id="map" style="width:100%; height: 100vh;"></div>
+<div id="myCoordinate"></div>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBH0-lnC8QZgYZ4l1_2qw0NiYJMUizykrE&callback=initMap&region=kr"></script>
-<script>
-    function onGeoOk(position){
-        const lat_1 = position.coords.latitude;
-        const lng_1 = position.coords.longitude;
-        console.log("You live in", lat_1, lng_1);
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+    let map;
+    let malls;
+    function parsing(data)
+    {
+        let json = data;
+        json = json.toString().replace(/\"item\":/gi, "");
+        json = json.toString().replace(/,{\"\"}/gi, "");
+        json = json.toString().replace(/ /gi, "");
+        json = json.toString().replace(/:/gi, "\" : \"");
+        json = json.toString().replace(/,/gi, "\", \"");
+        json = json.toString().replace(/\"{/gi, "{");
+        json = json.toString().replace(/}\"/gi, "}");
+        //let json2 = "{ \"item\": " + json;
+        //let word = "}";
+        //json2 = json2.concat(word);
+        let Obj = JSON.parse(json);
+        //console.log(Obj);
+        return Obj;
     }
-    function onGeoError(){
-        alert("Can't find you. No weather for you.");
-    }
-    navigator.geolocation.getCurrentPosition(onGeoOk,onGeoError);
-    function initMap() {
-        let mola = {lat: 35.9661568, lng: 126.7073024};
-        const map = new google.maps.Map(
-                document.getElementById('map'), {
-                    zoom: 12,
-                    center: mola
+    $(document).ready(function(){
+        $('#marking').click(function (){
+            let sendData = $('#myCoordinate').text();   //폼의 이름 값을 변수 안에 담아줌
+            let sendData_list = sendData.split("OK");
+            let digit2 = [];
+            sendData_list.forEach((item, index) => {
+                digit2.push({item});
+            });
+            let Obj_2 = parsing(JSON.stringify(digit2));
+            console.log(Obj_2);
+            malls = [{ label: "C", lat: 37.5115557, lng: 127.0595261 },
+                { label: "G", lat: 37.5062379, lng: 127.0050378 },
+                { label: "D", lat: 37.566596, lng: 127.007702 },
+                { label: "I", lat: 37.5251644, lng: 126.9255491 },
+                { label: "L", lat: 37.5125585, lng: 127.1025353 },
+                { label: "M", lat: 37.563692, lng: 126.9822107 },
+                { label: "T", lat: 37.5173108, lng: 126.9033793 },];
+            for (let i = 0; i < Obj_2.length; i++){
+                let obj = Obj_2[i];
+                //malls.push({label: obj["cropsName"], lat: parseFloat(obj["latitude"]), lng: parseFloat(obj["longitude"])},);
+            }
+            malls.forEach(({ label, lat, lng }) => {
+                const marker = new google.maps.Marker({
+                    position: { lat, lng },
+                    label,
+                    map,
                 });
+            });
+            console.log(malls);
+        });
+    });
 
-        let marker2 = new google.maps.Marker({position: mola, map: map});
-    }
-
-</script>
-<div>
 {{#dataOfDate}}
-<input type="checkbox" name="checkedValue" value="{{id}},{{name}},{{latitude}},{{longitude}}">{{id}}, {{name}}, {{latitude}}, {{longitude}}<br>
+    $('#myCoordinate').append("<p>"+ "<input type=\"checkbox\" name = \"Chk\">"
+            + "cropsName : "+ "{{name}}" + ", " +
+            "latitude : " + {{latitude}} + ", " +
+            "longitude : " + {{longitude}} + "<label hidden>OK</label></p>");
 {{/dataOfDate}}
-
-</div>
+    window.initMap = function () {
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: 37.5400456, lng: 126.9921017 },
+            zoom: 10,
+        });
+    };
+</script>
 </body>
 </html>
