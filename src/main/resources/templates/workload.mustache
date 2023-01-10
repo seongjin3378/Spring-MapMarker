@@ -9,6 +9,7 @@
     <button>save</button>
     <button>delete</button>
     <button id="marking">Marking</button>
+    <button id="CalDistance">CalDistance</button>
     <form method="post" action="/workload/loadData">
     <label for="date">select date :</label>
     <select name="date" id="date">
@@ -26,6 +27,7 @@
 <script type="text/javascript">
     let map;
     let malls;
+    let Distance_Array = [];
     function parsing(data)
     {
         let json = data;
@@ -43,6 +45,19 @@
         //console.log(Obj);
         return Obj;
     }
+    function getDistanceFromLatLonInKm(lat1,lng1,lat2,lng2) {
+        function deg2rad(deg) {
+            return deg * (Math.PI/180)
+        }
+
+        let R = 6371; // Radius of the earth in km
+        let dLat = deg2rad(lat2-lat1);  // deg2rad below
+        let dLon = deg2rad(lng2-lng1);
+        let a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon/2) * Math.sin(dLon/2);
+        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        let d = R * c; // Distance in km
+        return d;
+    }
     $(document).ready(function(){
         $('#marking').click(function (){
             let sendData = $('#myCoordinate').text();   //폼의 이름 값을 변수 안에 담아줌
@@ -54,12 +69,13 @@
             let Obj_2 = parsing(JSON.stringify(digit2));
             console.log(Obj_2);
             malls = [{ label: "C", lat: 37.5115557, lng: 127.0595261 },
-                { label: "G", lat: 37.5062379, lng: 127.0050378 },
+                { label: "C", lat: 37.5062379, lng: 127.0050378 },
                 { label: "D", lat: 37.566596, lng: 127.007702 },
-                { label: "I", lat: 37.5251644, lng: 126.9255491 },
-                { label: "L", lat: 37.5125585, lng: 127.1025353 },
-                { label: "M", lat: 37.563692, lng: 126.9822107 },
-                { label: "T", lat: 37.5173108, lng: 126.9033793 },];
+                { label: "D", lat: 37.5251644, lng: 126.9255491 },
+                { label: "E", lat: 37.5125585, lng: 127.1025353 },
+                { label: "E", lat: 37.563692, lng: 126.9822107 },
+                { label: "G", lat: 37.5173108, lng: 126.9033793 },
+                ];
             for (let i = 0; i < Obj_2.length; i++){
                 let obj = Obj_2[i];
                 //malls.push({label: obj["cropsName"], lat: parseFloat(obj["latitude"]), lng: parseFloat(obj["longitude"])},);
@@ -72,6 +88,23 @@
                 });
             });
             console.log(malls);
+        });
+        $('#CalDistance').click(function () {
+            let first_label = "null";
+            let first_lat;
+            let first_lng;
+            malls.forEach(({ label, lat, lng }) => {
+                if (first_label.toString() === label.toString()) {
+                    Distance_Array.push({label: label, KM:getDistanceFromLatLonInKm(first_lat, first_lng, lat, lng)},);
+                }
+                else {
+                    first_label = label;
+                    first_lat = lat;
+                    first_lng = lng;
+                }
+
+            });
+            console.log(Distance_Array);
         });
     });
 
