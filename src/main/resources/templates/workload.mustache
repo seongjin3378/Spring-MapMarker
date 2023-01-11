@@ -71,10 +71,10 @@
             malls = [{ label: "C", lat: 37.5115557, lng: 127.0595261 },
                 { label: "C", lat: 37.5062379, lng: 127.0050378 },
                 { label: "D", lat: 37.566596, lng: 127.007702 },
-                { label: "D", lat: 37.5251644, lng: 126.9255491 },
+                { label: "E", lat: 37.5251644, lng: 126.9255491 },
                 { label: "E", lat: 37.5125585, lng: 127.1025353 },
-                { label: "E", lat: 37.563692, lng: 126.9822107 },
-                { label: "G", lat: 37.5173108, lng: 126.9033793 },
+                { label: "E2", lat: 37.563692, lng: 126.9822107 },
+                { label: "E2", lat: 37.5173108, lng: 126.9033793 },
                 ];
             for (let i = 0; i < Obj_2.length; i++){
                 let obj = Obj_2[i];
@@ -104,7 +104,27 @@
                 }
 
             });
-            console.log(Distance_Array);
+            first_label = "null";
+            let filter_DisArray = Distance_Array;
+            let first_KM = 0;
+            let index = 0;
+            Distance_Array.forEach(({label, KM}) =>{
+                if (label.includes(first_label)) {
+                    first_KM += KM;
+                    label = label.replace(/[0-9]/g, "");
+                    filter_DisArray.push({label: label, KM: first_KM});
+                    delete filter_DisArray[index];
+                    delete filter_DisArray[index - 1];
+                    index += 1;
+                }
+                else {
+                    first_label = label;
+                    first_KM = KM;
+                    index += 1;
+                }
+            });
+            console.log("테스트");
+            console.log(filter_DisArray);
         });
     });
 
