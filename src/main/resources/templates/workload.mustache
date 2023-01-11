@@ -28,6 +28,9 @@
     let map;
     let malls;
     let Distance_Array = [];
+    Array.prototype.insert = function(index, item) {
+        this.splice(index, 0, item);
+    };
     function parsing(data)
     {
         let json = data;
@@ -89,7 +92,7 @@
             });
             console.log(malls);
         });
-        $('#CalDistance').click(function () {
+        $('#CalDistance').click(function (start) {
             let first_label = "null";
             let first_lat;
             let first_lng;
@@ -112,9 +115,10 @@
                 if (label.includes(first_label)) {
                     first_KM += KM;
                     label = label.replace(/[0-9]/g, "");
-                    filter_DisArray.push({label: label, KM: first_KM});
+                    //filter_DisArray.push({label: label, KM: first_KM});
                     delete filter_DisArray[index];
                     delete filter_DisArray[index - 1];
+                    filter_DisArray.insert(index, {label: label, KM: first_KM},);
                     index += 1;
                 }
                 else {
